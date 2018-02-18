@@ -11,17 +11,17 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-import static com.company.project.core.ProjectConstant.*;
+import static com.yixiaolabs.admin.core.ProjectConstant.*;
 
 /**
  * 代码生成器，根据数据表名称生成对应的Model、Mapper、Service、Controller简化开发。
  */
 public class CodeGenerator {
     //JDBC配置，请修改为你项目的实际配置
-    private static final String JDBC_URL = "jdbc:derby:/Users/jun/workspace/java/admin-base/db";
+    private static final String JDBC_URL = "jdbc:mysql://localhost:3306/sample";
     private static final String JDBC_USERNAME = "root";
     private static final String JDBC_PASSWORD = "";
-    private static final String JDBC_DIVER_CLASS_NAME = "org.apache.derby.jdbc.EmbeddedDriver";
+    private static final String JDBC_DIVER_CLASS_NAME = "com.mysql.jdbc.Driver";
 
     private static final String PROJECT_PATH = System.getProperty("user.dir");//项目在硬盘上的基础路径
     private static final String TEMPLATE_FILE_PATH = PROJECT_PATH + "/src/test/resources/generator/template";//模板位置
@@ -37,7 +37,8 @@ public class CodeGenerator {
     private static final String DATE = new SimpleDateFormat("yyyy/MM/dd").format(new Date());//@date
 
     public static void main(String[] args) {
-        genCode("输入表名");
+//        genCode("admin","admin_role", "auth", "menu", "role", "role_auth");
+        genCode("token");
         //genCode("输入表名","输入自定义Model名称");
     }
 
