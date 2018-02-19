@@ -7,6 +7,7 @@ import com.yixiaolabs.admin.model.Admin;
 import com.yixiaolabs.admin.service.AdminService;
 import com.yixiaolabs.admin.service.TokenService;
 import com.yixiaolabs.admin.utils.EncryptUtil;
+import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -39,7 +40,7 @@ public class LoginController {
 
         Admin admin = adminService.findBy("username", username);
 
-        if(admin == null || !EncryptUtil.matches(EncryptUtil.encode(password), admin.getPassword())){
+        if(admin == null || !EncryptUtil.matches(password, admin.getPassword())){
             return ResultGenerator.genFailResult("账号密码错误");
         }
         if(!admin.getIsEnabled()){
@@ -54,12 +55,10 @@ public class LoginController {
         return ResultGenerator.genSuccessResult(token);
 
     }
-
-    public static void main (String[] args){
-        System.out.println(EncryptUtil.encode("admin123"));
+    @PostMapping("/logout")
+    public Result logout(){
+        System.out.println(SecurityUtils.getSubject().getPrincipal());
+        return ResultGenerator.genSuccessResult();
     }
-
-
-
 
 }

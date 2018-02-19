@@ -14,4 +14,12 @@
     <result column="appid" jdbcType="VARCHAR" property="appid" />
     <result column="icon" jdbcType="VARCHAR" property="icon" />
   </resultMap>
+    <select id="findAllPermissions" resultType="java.lang.String">
+    select
+      DISTINCT m.appid
+
+    from admin a , admin_role ar, role r, role_auth ra, menu m
+
+    where a.id = ar.admins and ar.roles = r.id and r.id = ra.role_id and ra.auth_id = m.id and a.id = #{id};
+    </select>
 </mapper>

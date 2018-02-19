@@ -1,14 +1,17 @@
 package com.yixiaolabs.admin.web;
+
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.yixiaolabs.admin.core.Result;
 import com.yixiaolabs.admin.core.ResultGenerator;
 import com.yixiaolabs.admin.model.Admin;
 import com.yixiaolabs.admin.service.AdminService;
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import com.yixiaolabs.admin.service.TokenService;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -21,6 +24,8 @@ import java.util.List;
 public class AdminController {
     @Resource
     private AdminService adminService;
+    @Autowired
+    private TokenService tokenService;
 
     @PostMapping("/add")
     public Result add(Admin admin) {
@@ -40,10 +45,11 @@ public class AdminController {
         return ResultGenerator.genSuccessResult();
     }
 
-    @PostMapping("/detail")
-    public Result detail(@RequestParam Integer id) {
-        Admin admin = adminService.findById(id);
-        return ResultGenerator.genSuccessResult(admin);
+    @GetMapping("/info")
+    public Result detail(@RequestHeader HttpHeaders headers) {
+        String token = headers.get("X-Token").get(0);
+        Admin admin = adminService.findById(tokenService.findBy("token", token).getUserId());
+        return ResultGenerator.genSuccessResult(null);
     }
 
     @PostMapping("/list")
