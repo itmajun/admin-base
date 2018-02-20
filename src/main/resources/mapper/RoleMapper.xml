@@ -11,4 +11,7 @@
     <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
     <result column="modify_date" jdbcType="TIMESTAMP" property="modifyDate" />
   </resultMap>
+    <select id="findAllRoles" resultType="com.yixiaolabs.admin.model.Role">
+      select * from role where id in ( select roles from admin_role where admins = #{id})
+    </select>
 </mapper>

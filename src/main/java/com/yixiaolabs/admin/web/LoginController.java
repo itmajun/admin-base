@@ -6,6 +6,7 @@ import com.yixiaolabs.admin.core.ResultGenerator;
 import com.yixiaolabs.admin.model.Admin;
 import com.yixiaolabs.admin.service.AdminService;
 import com.yixiaolabs.admin.service.TokenService;
+import com.yixiaolabs.admin.utils.AuthUtil;
 import com.yixiaolabs.admin.utils.EncryptUtil;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,7 +58,8 @@ public class LoginController {
     }
     @PostMapping("/logout")
     public Result logout(){
-        System.out.println(SecurityUtils.getSubject().getPrincipal());
+        //更新token
+        tokenService.genToken(AuthUtil.currentId());
         return ResultGenerator.genSuccessResult();
     }
 

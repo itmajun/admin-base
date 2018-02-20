@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 
 /**
@@ -19,4 +20,9 @@ public class RoleServiceImpl extends AbstractService<Role> implements RoleServic
     @Resource
     private RoleMapper roleMapper;
 
+    @Override
+    @Transactional(readOnly = true)
+    public List<Role> findAllRoles(Integer id) {
+        return roleMapper.findAllRoles(id);
+    }
 }

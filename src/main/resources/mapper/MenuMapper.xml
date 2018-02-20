@@ -22,4 +22,11 @@
 
     where a.id = ar.admins and ar.roles = r.id and r.id = ra.role_id and ra.auth_id = m.id and a.id = #{id};
     </select>
+  <select id="findAllPermBean" resultType="com.yixiaolabs.admin.model.Menu">
+        select
+      DISTINCT m.*
+    from admin a , admin_role ar, role r, role_auth ra, menu m
+
+    where a.id = ar.admins and ar.roles = r.id and r.id = ra.role_id and ra.auth_id = m.id and a.id = #{id}
+  </select>
 </mapper>

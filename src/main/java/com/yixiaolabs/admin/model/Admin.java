@@ -1,6 +1,7 @@
 package com.yixiaolabs.admin.model;
 
 import java.util.Date;
+import java.util.List;
 import javax.persistence.*;
 
 public class Admin {
@@ -30,6 +31,9 @@ public class Admin {
     private String username;
 
     private String email;
+
+    @Transient
+    private List<Role> roles;
 
     /**
      * @return id
@@ -169,5 +173,13 @@ public class Admin {
      */
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public List<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<Role> roles) {
+        this.roles = roles;
     }
 }

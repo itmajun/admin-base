@@ -2,19 +2,24 @@ package com.yixiaolabs.admin.web;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.google.common.collect.Maps;
 import com.yixiaolabs.admin.core.Result;
 import com.yixiaolabs.admin.core.ResultGenerator;
 import com.yixiaolabs.admin.model.Admin;
+import com.yixiaolabs.admin.model.Menu;
+import com.yixiaolabs.admin.model.Role;
 import com.yixiaolabs.admin.service.AdminService;
+import com.yixiaolabs.admin.service.MenuService;
+import com.yixiaolabs.admin.service.RoleService;
 import com.yixiaolabs.admin.service.TokenService;
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
+import com.yixiaolabs.admin.utils.RequestUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
 * Created by CodeGenerator on 2018/02/18.
@@ -26,6 +31,10 @@ public class AdminController {
     private AdminService adminService;
     @Autowired
     private TokenService tokenService;
+    @Autowired
+    private RoleService roleService;
+    @Autowired
+    private MenuService menuService;
 
     @PostMapping("/add")
     public Result add(Admin admin) {
@@ -46,10 +55,24 @@ public class AdminController {
     }
 
     @GetMapping("/info")
-    public Result detail(@RequestHeader HttpHeaders headers) {
-        String token = headers.get("X-Token").get(0);
-        Admin admin = adminService.findById(tokenService.findBy("token", token).getUserId());
-        return ResultGenerator.genSuccessResult(null);
+    public Result detail() {
+
+        /** 封装 adminInfo **/
+        Map<String, Object> result = Maps.newHashMap();
+        Admin admin = adminService.findById(tokenService.findBy("token", RequestUtil.getToken()).getUserId());
+
+        if(admin == null){
+            return ResultGenerator.genFailResult("用户不存在");
+        }
+
+        // 查询 用户下的所有 角色, 所有权限
+        List<Role> roles = roleService.findAllRoles(admin.getId());
+        Set<Menu> menus = menuService.getPermBean(admin.getId());
+
+        result.put("admin", admin);
+        result.put("roles", roles);
+        result.put("menus", menus);
+        return ResultGenerator.genSuccessResult(result);
     }
 
     @PostMapping("/list")

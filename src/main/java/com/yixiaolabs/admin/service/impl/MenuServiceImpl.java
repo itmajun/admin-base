@@ -33,4 +33,18 @@ public class MenuServiceImpl extends AbstractService<Menu> implements MenuServic
         return null;
 
     }
+
+    @Override
+    public Set<Menu> getPermBean(Integer id) {
+        List<Menu> permissions = menuMapper.findAllPermBean(id);
+
+        //格式化menu
+
+        if(permissions != null && permissions.size() > 0 ){
+            return Sets.newHashSet(permissions);
+        }
+
+        return null;
+
+    }
 }
