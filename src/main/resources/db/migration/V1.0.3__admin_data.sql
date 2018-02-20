@@ -1,0 +1,2 @@
+/** admin/admin123 **/
+INSERT INTO `admin` VALUES (1,'2018-02-18 08:45:10','2018-02-18 08:45:14','','\0',NULL,'admin','$2a$10$WK6t/b52pMeCg6NFkilKKu.evRE3vToPmoZCCHgoXEUnFNnNeolBm','admin','admin@163.com');
