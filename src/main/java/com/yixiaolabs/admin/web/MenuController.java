@@ -1,14 +1,14 @@
 package com.yixiaolabs.admin.web;
+import com.google.common.base.Strings;
 import com.yixiaolabs.admin.core.Result;
 import com.yixiaolabs.admin.core.ResultGenerator;
 import com.yixiaolabs.admin.model.Menu;
 import com.yixiaolabs.admin.service.MenuService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import tk.mybatis.mapper.entity.Condition;
+import tk.mybatis.mapper.entity.Example;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -17,7 +17,7 @@ import java.util.List;
 * Created by CodeGenerator on 2018/02/18.
 */
 @RestController
-@RequestMapping("/menu")
+@RequestMapping("/system/menu")
 public class MenuController {
     @Resource
     private MenuService menuService;
@@ -46,10 +46,22 @@ public class MenuController {
         return ResultGenerator.genSuccessResult(menu);
     }
 
-    @PostMapping("/list")
-    public Result list(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size) {
+    @GetMapping("/list")
+    public Result list(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size
+                        , String name, Integer type, String appid) {
         PageHelper.startPage(page, size);
-        List<Menu> list = menuService.findAll();
+        Condition condition = new Condition(Menu.class);
+        Example.Criteria criteria = condition.createCriteria();
+        if(name != null && !"".equals(name)){
+            criteria.andLike("name", "%" + name + "%");
+        }
+        if(type !=null){
+            criteria.andEqualTo("type", type);
+        }
+        if(!Strings.isNullOrEmpty(appid)){
+            criteria.andEqualTo("appid", "%" + appid + "%");
+        }
+        List<Menu> list = menuService.findByCondition(condition);
         PageInfo pageInfo = new PageInfo(list);
         return ResultGenerator.genSuccessResult(pageInfo);
     }

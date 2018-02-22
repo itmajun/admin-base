@@ -39,7 +39,12 @@ public class LoginController {
             return ResultGenerator.genFailResult("密码不能为空");
         }
 
-        Admin admin = adminService.findBy("username", username);
+        Admin admin = null;
+        try{
+            admin = adminService.findBy("username", username);
+        }catch(Exception e){
+            //too many user
+        }
 
         if(admin == null || !EncryptUtil.matches(password, admin.getPassword())){
             return ResultGenerator.genFailResult("账号密码错误");
@@ -60,6 +65,7 @@ public class LoginController {
     public Result logout(){
         //更新token
         tokenService.genToken(AuthUtil.currentId());
+        SecurityUtils.getSubject().logout();
         return ResultGenerator.genSuccessResult();
     }
 
