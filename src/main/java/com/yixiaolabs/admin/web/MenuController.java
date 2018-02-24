@@ -59,7 +59,7 @@ public class MenuController {
             criteria.andEqualTo("type", type);
         }
         if(!Strings.isNullOrEmpty(appid)){
-            criteria.andEqualTo("appid", "%" + appid + "%");
+            criteria.andLike("appid", "%" + appid + "%");
         }
         List<Menu> list = menuService.findByCondition(condition);
         PageInfo pageInfo = new PageInfo(list);
