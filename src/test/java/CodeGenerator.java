@@ -1,6 +1,6 @@
+import com.alibaba.druid.util.StringUtils;
 import com.google.common.base.CaseFormat;
 import freemarker.template.TemplateExceptionHandler;
-import org.apache.commons.lang3.StringUtils;
 import org.mybatis.generator.api.MyBatisGenerator;
 import org.mybatis.generator.config.*;
 import org.mybatis.generator.internal.DefaultShellCallback;
@@ -18,9 +18,9 @@ import static com.yixiaolabs.admin.core.ProjectConstant.*;
  */
 public class CodeGenerator {
     //JDBC配置，请修改为你项目的实际配置
-    private static final String JDBC_URL = "jdbc:mysql://localhost:3306/sample";
+    private static final String JDBC_URL = "jdbc:mysql://192.168.50.242:3306/sample";
     private static final String JDBC_USERNAME = "root";
-    private static final String JDBC_PASSWORD = "";
+    private static final String JDBC_PASSWORD = "root";
     private static final String JDBC_DIVER_CLASS_NAME = "com.mysql.jdbc.Driver";
 
     private static final String PROJECT_PATH = System.getProperty("user.dir");//项目在硬盘上的基础路径
@@ -38,7 +38,7 @@ public class CodeGenerator {
 
     public static void main(String[] args) {
 //        genCode("admin","admin_role", "auth", "menu", "role", "role_auth");
-        genCode("token");
+        genCode("admin_log");
         //genCode("输入表名","输入自定义Model名称");
     }
 

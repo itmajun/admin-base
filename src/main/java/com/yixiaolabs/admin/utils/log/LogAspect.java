@@ -1,12 +1,15 @@
 package com.yixiaolabs.admin.utils.log;
 
+import com.yixiaolabs.admin.model.AdminLog;
+import com.yixiaolabs.admin.utils.AuthUtil;
+import com.yixiaolabs.admin.utils.jms.Producer;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.Map;
+import java.util.Date;
 
 /**
  * 记录操作日志切面类
@@ -19,6 +22,9 @@ import java.util.Map;
 @Aspect
 public class LogAspect {
 
+	@Autowired
+	private Producer producer;
+
 	/**
 	 * 切面方法
 	 * @param point 切点
@@ -30,8 +36,12 @@ public class LogAspect {
 		String type = log.type();//类型标识
 		String detail = log.detail();//操作描述
 		// jms 方式存储日志
+		AdminLog adminLog = new AdminLog();
+		adminLog.setType(log.type());
+		adminLog.setAdminId(AuthUtil.currentId());
+		adminLog.setAdminName(AuthUtil.currentName());
+		adminLog.setCreateTime(new Date());
+		adminLog.setDetail(log.detail());
+		producer.sendLog(adminLog);
 	}
-	
-	
-	
 }

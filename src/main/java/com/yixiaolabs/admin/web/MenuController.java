@@ -6,6 +6,7 @@ import com.yixiaolabs.admin.model.Menu;
 import com.yixiaolabs.admin.service.MenuService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.yixiaolabs.admin.utils.log.Log;
 import org.springframework.web.bind.annotation.*;
 import tk.mybatis.mapper.entity.Condition;
 import tk.mybatis.mapper.entity.Example;
@@ -23,6 +24,7 @@ public class MenuController {
     private MenuService menuService;
 
     @PostMapping("/add")
+    @Log(type = "MENU_ADD",detail = "添加菜单")
     public Result add(Menu menu) {
         menuService.save(menu);
         return ResultGenerator.genSuccessResult();
